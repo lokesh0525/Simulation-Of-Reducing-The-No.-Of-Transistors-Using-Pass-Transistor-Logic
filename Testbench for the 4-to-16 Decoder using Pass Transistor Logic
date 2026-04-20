@@ -1,0 +1,36 @@
+// Testbench for the 4-to-16 Decoder using Pass Transistor Logic
+// This testbench will cycle through all 16 possible input combinations (0000 to 1111)
+// and display the resulting 16-bit output vector.
+
+`timescale 1ns/1ps
+
+module tb_decoder_4to16_ptl;
+    // Declare testbench signals
+    reg A, B, C, D;
+    wire [15:0] Y;
+    
+    // Instantiate the decoder module
+    decoder_4to16_ptl uut (
+        .A(A),
+        .B(B),
+        .C(C),
+        .D(D),
+        .Y(Y)
+    );
+    
+    // Use an integer for loop iteration (0 to 15)
+    integer i;
+    
+    // Convert the loop counter to a 4-bit value and assign to inputs
+    initial begin
+        $display("Time\t A B C D\t | Y[15:0] (Active Low)");
+        $display("-------------------------------------------------------");
+        for (i = 0; i < 16; i = i + 1) begin
+            {A, B, C, D} = i;  // assign the 4-bit value to inputs (MSB to LSB)
+            #10; // wait 10 time units
+            $display("%4t:\t %b %b %b %b\t | %b", $time, A, B, C, D, Y);
+        end
+        $finish;
+    end
+
+endmodule
